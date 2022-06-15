@@ -1,0 +1,52 @@
+pipeline {
+  agent { label 'docker' } 
+
+  stages{
+    stage("build"){
+      tools{
+        nodejs "nodejs 8.9.0"
+      }
+      when{
+        changeset "**/result/**"
+      }
+      steps{
+        container('jnlp'){
+          sh 'cd result; npm install;'
+        }
+      }
+    }
+
+    stage("test"){
+      tools{
+        nodejs "nodejs 8.9.0"
+      }
+      when{
+        changeset "**/result/**"
+      }
+      steps{
+        container('jnlp'){
+          sh 'cd result; npm install; npm test;'
+        }
+      }
+    }
+
+    
+    stage("docker build-and-push"){
+      when{
+        changeset "**/result/**"
+      }
+      steps{
+        container('kaniko'){
+          sh 'ls -lah'
+          sh 'cd result; ls -lah; /kaniko/executor --context `pwd` --verbosity debug --destination harbor2.btech.id/library/result:main'
+        }
+      }
+    }
+
+
+  }
+  post{
+    always{
+      echo 'Pipeline Complete'}
+  }
+}
