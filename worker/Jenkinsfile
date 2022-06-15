@@ -61,6 +61,6 @@ pipeline {
   }
   post{
     always{
-      echo 'Pipeline Complete '}
+      echo 'Pipeline Complete'}
   }
 }
