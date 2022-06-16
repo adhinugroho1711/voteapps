@@ -11,7 +11,7 @@ pipeline {
       }
       steps{
         container('jnlp'){
-          sh 'cd vote; docker build . -t vote:main'
+          sh 'cd vote; docker build . -t vote;'
         }
       }
     }
