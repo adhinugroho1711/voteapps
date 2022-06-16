@@ -9,9 +9,6 @@ pipeline {
 
   stages{
     stage("build"){
-      tools{
-        'org.jenkinsci.plugins.docker.commons.tools.DockerTool' '18.09'
-      }
       when{
         changeset "**/vote/**"
       }
