@@ -2,18 +2,6 @@ pipeline {
   
   agent { label 'docker' } 
 
-  stages{
-    stage("build"){
-      when{
-        changeset "**/vote/**"
-      }
-      steps{
-        container('jnlp'){
-          sh 'cd vote; docker build . -t vote;'
-        }
-      }
-    }
-
     
     stage("docker build-and-push-image"){
       when{
