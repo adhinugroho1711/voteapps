@@ -1,0 +1,38 @@
+pipeline {
+  agent { label 'docker' } 
+
+  stages{
+    stage("build"){
+      tools{
+        nodejs "nodejs 8.9.0"
+      }
+      when{
+        changeset "**/vote/**"
+      }
+      steps{
+        container('jnlp'){
+          sh 'cd vote; docker build . -t vote:main'
+        }
+      }
+    }
+
+    
+    stage("docker build-and-push-image"){
+      when{
+        changeset "**/vote/**"
+      }
+      steps{
+        container('kaniko'){
+          sh 'ls -lah'
+          sh 'cd vote; ls -lah; /kaniko/executor --context `pwd` --verbosity debug --destination harbor2.btech.id/library/vote:main'
+        }
+      }
+    }
+
+
+  }
+  post{
+    always{
+      echo 'Pipeline Complete'}
+  }
+}
