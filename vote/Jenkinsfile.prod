@@ -2,16 +2,7 @@ pipeline {
   agent { label 'docker' } 
 
   stages{
-    stage("packaging"){
-      when{
-        changeset "**/worker/**"
-      }
-      steps{
-        container('jnlp'){
-          sh 'cd vote; fingerprint: true
-        }
-      }
-    }
+   
     stage("build-and-push-image"){
       when{
         changeset "**/vote/**"
